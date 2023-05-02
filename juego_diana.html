@@ -1,0 +1,93 @@
+<canvas width="600" height="400">
+
+</canvas>
+
+<script>
+    var pantalla = document.querySelector("canvas");
+    var pincel = pantalla.getContext("2d");
+    pincel.fillStyle = "white";
+    pincel.fillRect(0, 0, 600, 400);
+
+    function crearCircunferencia(x, y, radio, color) {
+        pincel.fillStyle = color;
+        pincel.beginPath();
+        pincel.arc(x, y, radio, 0, 2 * Math.PI);
+        pincel.fill();
+    }
+
+    function mostrarObjetivo(x, y) {
+
+        crearCircunferencia(x, y, 30, "red");
+        crearCircunferencia(x, y, 20, "white");
+        crearCircunferencia(x, y, 10, "red");
+
+    }
+
+    function calcularNumeroAleatorio(maximo) {
+
+        return Math.floor(Math.random() * maximo);
+
+    }
+
+    function limpiarPantalla() {
+
+        pincel.clearRect(0, 0, 600, 400);
+
+    }
+
+    function actualizarPantalla() {
+
+        limpiarPantalla();
+        xObjetivo = calcularNumeroAleatorio(570);
+        yObjetivo = calcularNumeroAleatorio(370);
+        mostrarObjetivo(xObjetivo, yObjetivo);
+        calcularResultados();
+
+    }
+
+    function disparar(evento) {
+
+        var x = evento.pageX - pantalla.offsetLeft;
+        var y = evento.pageY - pantalla.offsetTop;
+
+        if
+            (
+            (x < xObjetivo + 10)
+            && (x > xObjetivo - 10)
+            && (y < yObjetivo + 10)
+            && (y > yObjetivo - 10)
+        ) {
+            TotalAcertados++;
+            limpiarPantalla();
+        }
+    }
+
+    function calcularResultados() {
+
+        if (TotalObjetivos == 5) {
+
+            Precision = TotalAcertados / TotalObjetivos * 100;
+            alert("Tiro Certero" + "\nObjetivos Lanzados: " + TotalObjetivos + "\nObjetivos Acertados: " + TotalAcertados + "\n\nPrecisión: " + Precision + "%");
+            TotalObjetivos = 0;
+            TotalAcertados = 0;
+        } else {
+
+            TotalObjetivos++;
+
+        }
+
+    }
+
+
+    var xObjetivo;
+    var yObjetivo;
+
+    var TotalObjetivos = 0;
+    var TotalAcertados = 0;
+    var Precision;
+
+    setInterval(actualizarPantalla, 2000);
+    pantalla.onclick = disparar;
+
+
+</script>
